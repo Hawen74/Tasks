@@ -10,7 +10,7 @@ interface PaginatedResponse<T> {
 }
 
 const api = axios.create({
-    baseURL: "http://localhost:3000",
+    baseURL: import.meta.env.VITE_API_URL,
 });
 
 // Automatically attach access token to protected requests
