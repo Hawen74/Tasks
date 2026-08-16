@@ -1,0 +1,13 @@
+{
+    "sqltools.connections": [
+        {
+            "ssh": "Disabled",
+            "previewLimit": 50,
+            "server": "localhost",
+            "driver": "PostgreSQL",
+            "connectString": "postgresql://postgres:3O74fON0RDWqPIoP@db.lksiudyoxbldjqqwycyi.supabase.co:5432/postgres",
+            "name": "database"
+        }
+    ],
+    "postman.settings.dotenv-detection-notification-visibility": false
+}
