@@ -134,22 +134,20 @@ const Tracker = () => {
   const handleLogout = async () => {
     const refreshToken = localStorage.getItem("refreshToken");
 
-    if (!refreshToken) {
-        navigate("/");
-        return;
-    }
-
     try {
+      if (refreshToken) {
         await logout(refreshToken);
-
-        localStorage.removeItem("refreshToken");
-        localStorage.removeItem("user");
-
-        navigate("/");
+      }
     } catch (error) {
-        console.error("Logout failed:", error);
+      console.error("Logout request failed:", error);
+    } finally {
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
+      localStorage.removeItem("user");
+
+      navigate("/");
     }
-};
+  };
 
   return (
     <div className={styles.page}>
@@ -166,7 +164,7 @@ const Tracker = () => {
             User: {userName}
           </p>
 
-          <button 
+          <button
             className={styles.logoutButton}
             onClick={handleLogout}
           >

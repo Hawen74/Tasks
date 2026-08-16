@@ -541,21 +541,18 @@ app.post(
         req: Request,
         res: Response
     ) => {
-        const {
-            refreshToken,
-        } = req.body;
+        const { refreshToken } = req.body;
 
-        if (!refreshTokenSet.has(refreshToken)) {
-            return res.status(401).json({
-                error: "Invalid or expired refresh token",
-                code: "INVALID_REFRESH_TOKEN",
+        if (!refreshToken) {
+            return res.status(400).json({
+                error: "Refresh token is required",
             });
         }
 
         refreshTokenSet.delete(refreshToken);
 
         return res.json({
-            message: "Logout successful",
+            message: "Logged out successfully",
         });
     }
 );
