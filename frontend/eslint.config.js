@@ -20,3 +20,5 @@ export default defineConfig([
     },
   },
 ])
+
+const unusedVar = 123;
