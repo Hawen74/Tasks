@@ -20,7 +20,11 @@ jobs:
       - name: Install dependencies
         run: npm install
         working-directory: backend
-            
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: frontend
+
       - name: Run linter
         run: npm run lint
         working-directory: frontend
