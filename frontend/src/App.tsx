@@ -5,6 +5,8 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 
 const App = () => {
+    const unusedVar = 123;
+
     return (
         <BrowserRouter>
             <Routes>

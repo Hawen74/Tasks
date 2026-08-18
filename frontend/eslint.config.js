@@ -18,7 +18,8 @@ export default defineConfig([
     languageOptions: {
       globals: globals.browser,
     },
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'error', // 👈 Forces unused variables to fail the build
+    },
   },
 ])
-
-const unusedVar = 123;
