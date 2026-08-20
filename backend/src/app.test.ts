@@ -98,3 +98,13 @@ describe("Tasks API Endpoints", () => {
         expect(res.body.code).toBe("ROUTE_NOT_FOUND");
     });
 })
+
+// In your test suite for /api/version
+describe('GET /api/version', () => {
+  it('returns the correct version', async () => {
+    const res = await request(app).get('/api/version');
+    expect(res.status).toBe(200);
+    // Intentionally break this assertion:
+    expect(res.body.version).toBe('v9.9.9-does-not-exist'); 
+  });
+});
