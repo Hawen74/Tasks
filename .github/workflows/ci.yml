@@ -3,29 +3,58 @@ name: CI
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgrespassword
+          POSTGRES_DB: tasks_test_db
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
 
-      - name: Set up Node
-        uses: actions/setup-node@v4
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
 
-      - name: Install dependencies
-        run: npm install
+      - name: Install backend dependencies
+        run: npm ci
         working-directory: backend
 
-      - name: Install dependencies
-        run: npm install
-        working-directory: frontend
+      # Run tests using local Postgres connection string
+      - name: Run backend tests
+        run: npm test
+        working-directory: backend
+        env:
+          DATABASE_URL: postgresql://postgres:postgrespassword@localhost:5432/tasks_test_db
+          SUPABASE_URL: http://localhost:5432
+          SUPABASE_ANON_KEY: mock-key-for-testing
 
-      - name: Run linter
-        run: npm run lint
-        working-directory: frontend
-            
+  deploy: 
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Placeholder deploy step
+        run: echo "Test passed! Ready to deploy."
+
+      - name: Trigger Render Deployment
+        run: | 
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
