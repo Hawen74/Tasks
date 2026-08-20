@@ -46,3 +46,15 @@ jobs:
           DATABASE_URL: postgresql://postgres:postgrespassword@localhost:5432/tasks_test_db
           SUPABASE_URL: http://localhost:5432
           SUPABASE_ANON_KEY: mock-key-for-testing
+
+  deploy: 
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Placeholder deploy step
+        run: echo "Test passed! Ready to deploy."
+
+      - name: Trigger Render Deployment
+        run: | 
+          curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
